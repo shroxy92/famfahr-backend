@@ -37,10 +37,10 @@
         <a class="nav-link {{ Request::is('emp_list') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('emp_list') }}">
             Employee List
         </a>
-
-        <a class="nav-link {{ Request::is('user_permission') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('user_permission') }}">
-            Manage Permission
-        </a>
-
+        @can('user_permission')
+            <a class="nav-link {{ Request::is('user_permission') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('user_permission') }}">
+                Manage Permission
+            </a>
+        @endcan
     </nav>
 </div>
