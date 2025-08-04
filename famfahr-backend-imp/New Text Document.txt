@@ -1,0 +1,121 @@
+@extends('layouts.master')
+
+@section('title', 'Dashboard')
+
+@section('content')
+    <div class="container-fluid px-4">
+        <h1 class="mt-4 mb-4 text-success">Dashboard</h1>
+
+        {{-- Quick Stats --}}
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm" style="background-color: #e6f9f0;">
+                    <div class="card-body text-success">
+                        <h6 class="mb-2"><i class="fas fa-calendar-check me-2"></i>Total Availed Leave</h6>
+                        <h4 class="fw-bold">52 Days</h4>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a class="text-success text-decoration-none small fw-semibold" href="#">View Details <i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm" style="background-color: #fff6e6;">
+                    <div class="card-body text-warning">
+                        <h6 class="mb-2"><i class="fas fa-clock me-2"></i>Total Delay</h6>
+                        <h4 class="fw-bold">8 Times</h4>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a class="text-warning text-decoration-none small fw-semibold" href="#">View Details <i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm" style="background-color: #e6f7ff;">
+                    <div class="card-body text-primary">
+                        <h6 class="mb-2"><i class="fas fa-user-check me-2"></i>Success Card</h6>
+                        <h4 class="fw-bold">12 Achievements</h4>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a class="text-primary text-decoration-none small fw-semibold" href="#">View Details <i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card border-0 shadow-sm" style="background-color: #ffe6e6;">
+                    <div class="card-body text-danger">
+                        <h6 class="mb-2"><i class="fas fa-exclamation-triangle me-2"></i>Issues Reported</h6>
+                        <h4 class="fw-bold">3</h4>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <a class="text-danger text-decoration-none small fw-semibold" href="#">View Details <i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Chart Section --}}
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-chart-bar me-2"></i>Monthly Leave Overview
+            </div>
+            <div class="card-body">
+                <canvas id="leaveChart" height="100"></canvas>
+            </div>
+        </div>
+
+        {{-- Table Section --}}
+        <div class="card shadow-sm mb-5">
+            <div class="card-header bg-light text-success">
+                <i class="fas fa-users me-2"></i>Recent Activities
+            </div>
+            <div class="card-body">
+                <table class="table table-striped align-middle" id="datatablesSimple">
+                    <thead>
+                    <tr>
+                        <th>Name</th><th>Position</th><th>Office</th><th>Age</th><th>Start date</th><th>Salary</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td>Tiger Nixon</td><td>System Architect</td><td>Edinburgh</td><td>61</td><td>2011/04/25</td><td>$320,800</td></tr>
+                    <tr><td>Jane Doe</td><td>HR Manager</td><td>London</td><td>34</td><td>2018/11/01</td><td>$145,000</td></tr>
+                    <tr><td>Michael Smith</td><td>Developer</td><td>New York</td><td>29</td><td>2020/02/17</td><td>$98,400</td></tr>
+                    {{-- Add more rows --}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{-- Chart.js CDN --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById('leaveChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Leaves Availed',
+                    data: [4, 2, 6, 3, 5, 7, 2],
+                    backgroundColor: '#28a745',
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true },
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    </script>
+@endsection

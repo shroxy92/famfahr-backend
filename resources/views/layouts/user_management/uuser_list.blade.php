@@ -28,10 +28,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ([
-                                ['username' => 'johndoe', 'name' => 'John Doe', 'dept' => 'IT', 'role' => 'Admin', 'status' => 'Active'],
-                                ['username' => 'janesmith', 'name' => 'Jane Smith', 'dept' => 'HR', 'role' => 'HR', 'status' => 'Inactive']
-                            ] as $user)
+                            @foreach ($userList as $user)
                                 <tr>
                                     <td>{{ $user['username'] }}</td>
                                     <td>{{ $user['name'] }}</td>
