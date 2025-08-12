@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Contracts\EmployeeServiceContract;
 use App\Http\Requests\EmployeeCreateRequest;
+use App\Models\Department;
 use App\Models\Employee;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class EmployeeManageController extends Controller
@@ -18,7 +20,8 @@ class EmployeeManageController extends Controller
     }
     public function viewForm()
     {
-        return view('layouts.user_management.uadd_employee');
+        $departmentList = Department::all();
+        return view('layouts.user_management.uadd_employee',compact('departmentList'));
     }
     public function createEmployee (EmployeeCreateRequest $employeeRequest): RedirectResponse
     {
@@ -36,7 +39,12 @@ class EmployeeManageController extends Controller
         $indivisualData = $this->employeeService->getEmployeeById($id);
         return view('layouts.user_management.uemployee_profile',compact('indivisualData'));
     }
-
+    public function user_profile(): ?View
+    {
+        $id = Auth::user()->emp_id;
+        $indivisualData = $this->employeeService->getEmployeeById($id);
+        return view('layouts.user_management.uemployee_profile',compact('indivisualData'));
+    }
     public function deleteEmployee(int $id): bool
     {
         return $this->employeeService->deleteEmployee($id);

@@ -172,7 +172,14 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="department" class="form-label">Department</label>
-                                    <input type="text" name="department" class="form-control" required>
+                                    <select name="department" class="form-select" required>
+                                        <option value="">Choose Department</option>
+                                        @foreach($departmentList as $dl)
+                                            <option value="{{ $dl->id }}">
+                                                {{ $dl->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="status" class="form-label">Status</label>

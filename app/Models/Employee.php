@@ -39,7 +39,6 @@ class Employee extends Model
         'nid_name',
         'joining_date',
         'designation',
-        'department',
         'status',
     ];
 
@@ -56,6 +55,11 @@ class Employee extends Model
     /**
      * Get the user associated with the employee.
      */
+    public function departments()
+    {
+        return $this->belongsToMany(Department::class,'department_employee');
+
+    }
     public function user()
     {
         return $this->hasOne(User::class, 'emp_id', 'employee_id');

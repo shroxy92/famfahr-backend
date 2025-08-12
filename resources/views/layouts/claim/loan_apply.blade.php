@@ -18,7 +18,7 @@
                                 </div>
                                 <div class="card-body">
 {{--                                    <form method="POST" action="{{ route('advance-salary.store') }}">--}}
-                                    <form method="POST" action="">
+                                    <form method="POST" action="{{route('loan.submit')}}">
                                     @csrf
                                     <div class = "row mb-3">
                                         {{-- Advance Amount --}}

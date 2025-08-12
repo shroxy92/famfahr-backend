@@ -49,7 +49,12 @@
             <div class="row mb-4">
                 <div class="col-md-6">
                     <p><span class="info-label"><i class="fas fa-briefcase me-2"></i>Designation:</span> {{ $indivisualData->designation }}</p>
-                    <p><span class="info-label"><i class="fas fa-building me-2"></i>Department:</span> {{ $indivisualData->department }}</p>
+                    <p><span class="info-label"><i class="fas fa-building me-2"></i>Department:</span> @if ($indivisualData->departments->isNotEmpty())
+                                    {{ $indivisualData->departments->pluck('name')->join(', ') }}
+                        @else
+                            N/A
+                        @endif
+                    </p>
                     <p><span class="info-label"><i class="fas fa-calendar-plus me-2"></i>Joining Date:</span> {{ $indivisualData->joining_date->format('Y-m-d') }}</p>
                 </div>
                 <div class="col-md-6">

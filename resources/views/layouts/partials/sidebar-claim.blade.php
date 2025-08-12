@@ -1,7 +1,7 @@
 @php
-    $isClaimOpen = Request::is('claim_request_form') || Request::is('advance_salary') || Request::is('loan_apply') || Request::is('all_claim_requested_list') || Request::is('requested_details');
-    $isClaimApplyOpen = Request::is('claim_request_form') || Request::is('advance_salary') || Request::is('loan_apply');
-    $isClaimReportOpen = Request::is('all_claim_requested_list') || Request::is('requested_details');
+    $isClaimOpen = Request::is('claim/request/apply') || Request::is('advance/salary/apply') || Request::is('claim/loan/apply') || Request::is('claim/list/all') || Request::is('requested_details');
+    $isClaimApplyOpen = Request::is('claim/request/apply') || Request::is('advance/salary/apply') || Request::is('claim/loan/apply');
+    $isClaimReportOpen = Request::is('claim/list/all') || Request::is('requested_details');
 @endphp
 
 <a class="nav-link {{ $isClaimOpen ? '' : 'collapsed' }}" style="color: #2f4f4f !important;" href="#" data-bs-toggle="collapse"
@@ -21,9 +21,9 @@
         </a>
         <div class="collapse {{ $isClaimApplyOpen ? 'show' : '' }}" id="claimCollapseApply" data-bs-parent="#sidenavAccordionClaim">
             <nav class="sb-sidenav-menu-nested nav">
-                <a class="nav-link {{ Request::is('claim_request_form') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('claim_request_form') }}">New Claim</a>
-                <a class="nav-link {{ Request::is('advance_salary') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('advance_salary') }}">Advance Salary</a>
-                <a class="nav-link {{ Request::is('loan_apply') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('loan_apply') }}">Loan</a>
+                <a class="nav-link {{ Request::is('claim/request/apply') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('claim.request.apply') }}">New Claim</a>
+                <a class="nav-link {{ Request::is('advance/salary/apply') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('advance.salary.apply') }}">Advance Salary</a>
+                <a class="nav-link {{ Request::is('claim/loan/apply') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('loan.apply') }}">Loan</a>
             </nav>
         </div>
 
@@ -35,7 +35,7 @@
         </a>
         <div class="collapse {{ $isClaimReportOpen ? 'show' : '' }}" id="claimCollapseReport" data-bs-parent="#sidenavAccordionClaim">
             <nav class="sb-sidenav-menu-nested nav">
-                <a class="nav-link {{ Request::is('all_claim_requested_list') || Request::is('requested_details') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('all_claim_requested_list') }}">All Claimed Request</a>
+                <a class="nav-link {{ Request::is('claim/list/all') || Request::is('requested_details') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('claim.list') }}">All Claimed Request</a>
             </nav>
         </div>
 

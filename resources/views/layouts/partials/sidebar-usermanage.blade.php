@@ -1,8 +1,9 @@
 @php
     $isUserManageOpen = Request::is('employee/form') ||
                         Request::is('user/add') ||
-                        Request::is('user_manage') ||
-                        Request::is('add_dept_lead') ||
+                        Request::is('users') ||
+                        Request::is('users/*') ||
+                        Request::is('department-leads/add') ||
                         Request::is('employee/list') ||
                         Request::is('employee/list/*') ||
                         Request::is('user_permission');
@@ -23,15 +24,15 @@
             Add Employee
         </a>
 
-        <a class="nav-link {{ Request::is('user/add') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('hr.user.index') }}">
+        <a class="nav-link {{ Request::is('user/add') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('hr.user.create') }}">
             Add User
         </a>
 
-        <a class="nav-link {{ Request::is('user_manage') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('user_manage') }}">
+        <a class="nav-link {{ Request::is('users') || Request::is('users/*') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('hr.users') }}">
             User Manage
         </a>
 
-        <a class="nav-link {{ Request::is('add_dept_lead') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('add_dept_lead') }}">
+        <a class="nav-link {{ Request::is('department-leads/add') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('hr.lead.add') }}">
             Add Department Lead
         </a>
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\EmployeeRepositoryContract;
 use App\Contracts\EmployeeServiceContract;
 use App\Models\Employee;
 use App\Repositories\EmployeeRepository;
@@ -12,7 +13,7 @@ class EmployeeService implements EmployeeServiceContract
 {
     protected $employeeRepository;
 
-    public function __construct(EmployeeRepository $employeeRepository)
+    public function __construct(EmployeeRepositoryContract $employeeRepository)
     {
         $this->employeeRepository = $employeeRepository;
     }

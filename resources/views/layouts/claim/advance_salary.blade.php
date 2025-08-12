@@ -18,9 +18,8 @@
                                 </div>
                                 <div class="card-body">
 {{--                                    <form action="{{ //route('advance-salary.store') }}" method="POST">--}}
-                                    <form action="" method="POST">
+                                    <form action="{{route('advance.salary.submit')}}" method="POST">
                                     @csrf
-
                                         <div class="form-floating mb-3">
                                             <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror" id="amount" placeholder="5000" value="{{ old('amount') }}" required>
                                             <label for="amount">Requested Amount</label>

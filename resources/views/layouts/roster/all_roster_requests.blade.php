@@ -1,252 +1,103 @@
 @extends('layouts.master')
 
-@section('title', 'Applied Duty Applications')
+@section('title', 'Processed Duty Requests')
 
 @section('content')
-    <div class="container py-5 row">
-        <h2 class="mb-4 text-center">My Duty Applications</h2>
-        <div class="col-1">
+    <style>
+        :root {
+            --mint-green: #ADEBB3;
+            --mint-green-dark: #79e879;
+            --mint-green-light: #F0FFF0;
+            --text-dark: #2f2f2f;
+        }
+        .badge-approved { background-color: var(--mint-green); color: var(--text-dark); }
+        .badge-rejected { background-color: #f28b82; color: white; }
+        .filter-panel { background-color: var(--mint-green-light); padding: 1rem; border-radius: 8px; }
+        .card-header-custom { background-color: var(--mint-green); color: var(--text-dark); }
+    </style>
 
-        </div>
-        <div class="col-10">
-        {{-- Holiday Duty Applications --}}
-        <div class="card shadow-sm mb-5">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Holiday Duty Applications</h5>
-            </div>
-            <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>04 Jul 2025</td>
-                        <td>Public</td>
-                        <td>Server maintenance</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr onclick="window.location='{{ url('request_details') }}';" style="cursor:pointer;">
-                        <td>2</td>
-                        <td>01 May 2025</td>
-                        <td>Festival</td>
-                        <td>Client support needed</td>
-                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="container py-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-clipboard-check me-2"></i>Processed Requests</h5>
 
-        {{-- Late Night Duty Applications --}}
-        <div class="card shadow-sm mb-5">
-            <div class="card-header bg-dark text-white">
-                <h5 class="mb-0"><i class="bi bi-moon-stars-fill me-2"></i>Late Night Duty Applications</h5>
+                <form method="GET" class="filter-panel d-flex gap-2 align-items-center">
+                    <label for="status" class="mb-0">Status:</label>
+                    <select name="status" id="status" class="form-select form-select-sm w-auto">
+                        <option value="">All</option>
+                        <option value="approved"{{ request('status') == 'approved' ? ' selected' : '' }}>Approved</option>
+                        <option value="rejected"{{ request('status') == 'rejected' ? ' selected' : '' }}>Rejected</option>
+                    </select>
+                    <button type="submit" class="btn btn-success btn-sm">Filter</button>
+                </form>
             </div>
-            <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>05 Jul 2025</td>
-                        <td>21:00</td>
-                        <td>23:30</td>
-                        <td>Production release</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>29 Jun 2025</td>
-                        <td>22:00</td>
-                        <td>23:00</td>
-                        <td>Emergency patch</td>
-                        <td><span class="badge bg-danger">Rejected</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-        {{-- Extra Duty Applications --}}
-        <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i>Extra Duty Applications</h5>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Details</th>
+                            <th>Status</th>
+                            <th>Processed On</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @forelse ($processedRequests as $i => $req)
+                            <tr>
+                                <td>{{ $i + 1 }}</td>
+                                <td><span class="badge
+                                    @if ($req->type === 'extra') bg-success
+                                    @elseif ($req->type === 'holiday') bg-warning text-dark
+                                    @elseif ($req->type === 'latenight') bg-info text-dark
+                                    @endif
+                                    text-capitalize">
+                                    {{ $req->type }}
+                                </span></td>
+                                <td>{{ \Carbon\Carbon::parse($req->date)->format('d M Y') }}</td>
+                                <td>
+                                    <small>
+                                        @switch($req->type)
+                                            @case('extra')
+                                                <strong>Time:</strong> {{ $req->time_range }}<br>
+                                                <strong>Task:</strong> {{ $req->details }}
+                                                @break
+
+                                            @case('holiday')
+                                                <strong>Reason:</strong> {{ $req->details }}
+                                                @break
+
+                                            @case('latenight')
+                                                <strong>Time:</strong> {{ $req->time_range }}<br>
+                                                <strong>Reason:</strong> {{ $req->details }}
+                                                @break
+                                        @endswitch
+                                    </small>
+                                </td>
+                                <td>
+                                    @if ($req->status === 'approved')
+                                        <span class="badge badge-approved">Approved</span>
+                                    @else
+                                        <span class="badge badge-rejected">Rejected</span>
+                                    @endif
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($req->processed_at)->format('d M Y, h:i A') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    No processed requests found.
+                                </td>
+                            </tr>
+                        @endforelse
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Task</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>02 Jul 2025</td>
-                        <td>10:00</td>
-                        <td>14:00</td>
-                        <td>Client report preparation</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>30 Jun 2025</td>
-                        <td>15:00</td>
-                        <td>18:00</td>
-                        <td>Data migration</td>
-                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
         </div>
     </div>
 @endsection
-
-
-{{--    @extends('layouts.master')--}}
-
-{{--    @section('title', 'Applied Duty Applications')--}}
-
-{{--    @section('content')--}}
-{{--        <div class="container py-5">--}}
-{{--            <h2 class="mb-4 text-center">My Duty Applications</h2>--}}
-
-{{--            <div class="card shadow-sm mb-5">--}}
-{{--                <div class="card-header bg-primary text-white">--}}
-{{--                    <h5 class="mb-0"><i class="bi bi-calendar-event me-2"></i>Holiday Duty Applications</h5>--}}
-{{--                </div>--}}
-{{--                <div class="card-body p-0">--}}
-{{--                    <table class="table table-hover mb-0">--}}
-{{--                        <thead class="table-light">--}}
-{{--                        <tr>--}}
-{{--                            <th>#</th>--}}
-{{--                            <th>Date</th>--}}
-{{--                            <th>Type</th>--}}
-{{--                            <th>Reason</th>--}}
-{{--                            <th>Status</th>--}}
-{{--                        </tr>--}}
-{{--                        </thead>--}}
-{{--                        <tbody>--}}
-{{--                        @forelse ($holidayDuties as $duty)--}}
-{{--                            <tr>--}}
-{{--                                <td>{{ $loop->iteration }}</td>--}}
-{{--                                <td>{{ \Carbon\Carbon::parse($duty->duty_date)->format('d M Y') }}</td>--}}
-{{--                                <td class="text-capitalize">{{ $duty->holiday_type }}</td>--}}
-{{--                                <td>{{ $duty->reason ?? '—' }}</td>--}}
-{{--                                <td>--}}
-{{--                                <span class="badge bg-{{ getStatusClass($duty->status) }}">--}}
-{{--                                    {{ ucfirst($duty->status) }}--}}
-{{--                                </span>--}}
-{{--                                </td>--}}
-{{--                            </tr>--}}
-{{--                        @empty--}}
-{{--                            <tr><td colspan="5" class="text-center text-muted">No applications found.</td></tr>--}}
-{{--                        @endforelse--}}
-{{--                        </tbody>--}}
-{{--                    </table>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
-{{--            <!-- Late Night Duty Section -->--}}
-{{--            <div class="card shadow-sm mb-5">--}}
-{{--                <div class="card-header bg-dark text-white">--}}
-{{--                    <h5 class="mb-0"><i class="bi bi-moon-stars-fill me-2"></i>Late Night Duty Applications</h5>--}}
-{{--                </div>--}}
-{{--                <div class="card-body p-0">--}}
-{{--                    <table class="table table-hover mb-0">--}}
-{{--                        <thead class="table-light">--}}
-{{--                        <tr>--}}
-{{--                            <th>#</th>--}}
-{{--                            <th>Date</th>--}}
-{{--                            <th>From</th>--}}
-{{--                            <th>To</th>--}}
-{{--                            <th>Reason</th>--}}
-{{--                            <th>Status</th>--}}
-{{--                        </tr>--}}
-{{--                        </thead>--}}
-{{--                        <tbody>--}}
-{{--                        @forelse ($lateNightDuties as $duty)--}}
-{{--                            <tr>--}}
-{{--                                <td>{{ $loop->iteration }}</td>--}}
-{{--                                <td>{{ \Carbon\Carbon::parse($duty->duty_date)->format('d M Y') }}</td>--}}
-{{--                                <td>{{ $duty->from_time }}</td>--}}
-{{--                                <td>{{ $duty->to_time }}</td>--}}
-{{--                                <td>{{ $duty->reason ?? '—' }}</td>--}}
-{{--                                <td>--}}
-{{--                                <span class="badge bg-{{ getStatusClass($duty->status) }}">--}}
-{{--                                    {{ ucfirst($duty->status) }}--}}
-{{--                                </span>--}}
-{{--                                </td>--}}
-{{--                            </tr>--}}
-{{--                        @empty--}}
-{{--                            <tr><td colspan="6" class="text-center text-muted">No applications found.</td></tr>--}}
-{{--                        @endforelse--}}
-{{--                        </tbody>--}}
-{{--                    </table>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
-{{--            <!-- Extra Duty Section -->--}}
-{{--            <div class="card shadow-sm">--}}
-{{--                <div class="card-header bg-success text-white">--}}
-{{--                    <h5 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i>Extra Duty Applications</h5>--}}
-{{--                </div>--}}
-{{--                <div class="card-body p-0">--}}
-{{--                    <table class="table table-hover mb-0">--}}
-{{--                        <thead class="table-light">--}}
-{{--                        <tr>--}}
-{{--                            <th>#</th>--}}
-{{--                            <th>Date</th>--}}
-{{--                            <th>From</th>--}}
-{{--                            <th>To</th>--}}
-{{--                            <th>Task</th>--}}
-{{--                            <th>Status</th>--}}
-{{--                        </tr>--}}
-{{--                        </thead>--}}
-{{--                        <tbody>--}}
-{{--                        @forelse ($extraDuties as $duty)--}}
-{{--                            <tr>--}}
-{{--                                <td>{{ $loop->iteration }}</td>--}}
-{{--                                <td>{{ \Carbon\Carbon::parse($duty->extra_date)->format('d M Y') }}</td>--}}
-{{--                                <td>{{ $duty->start_time }}</td>--}}
-{{--                                <td>{{ $duty->end_time }}</td>--}}
-{{--                                <td>{{ $duty->task_description ?? '—' }}</td>--}}
-{{--                                <td>--}}
-{{--                                <span class="badge bg-{{ getStatusClass($duty->status) }}">--}}
-{{--                                    {{ ucfirst($duty->status) }}--}}
-{{--                                </span>--}}
-{{--                                </td>--}}
-{{--                            </tr>--}}
-{{--                        @empty--}}
-{{--                            <tr><td colspan="6" class="text-center text-muted">No applications found.</td></tr>--}}
-{{--                        @endforelse--}}
-{{--                        </tbody>--}}
-{{--                    </table>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    @endsection--}}

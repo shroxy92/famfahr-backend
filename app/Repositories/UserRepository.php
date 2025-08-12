@@ -33,11 +33,30 @@ class UserRepository implements UserRepositoryContract
         return $user;
     }
 
+    public function editUser(int $id)
+    {
+        $data = $this->model::with('employee','roles')->find($id);
+        return $data;
+    }
+
     public function updateUser(int $id, array $data): User
     {
         // TODO: Implement updateUser() method.
 
-        return $this->model->update($id,$data);
+        $user = $this->model::with('employee','roles')->find($id);
+
+        if($user->employee()->exists()){
+            $user->employee()->update([
+                'department' => $data['department'],
+                'status'    => $data['status'],
+            ]);
+        }
+
+        if($user->roles()->exists()){
+            $user->syncRoles([$data['role']]);
+        }
+
+        return $user;
     }
 
     public function deleteUser(int $id): bool
@@ -56,7 +75,7 @@ class UserRepository implements UserRepositoryContract
                 'name'     => optional($user->employee)->first_name . ' ' . optional($user->employee)->last_name,
                 'dept'     => optional($user->employee)->department,
                 'role'     => optional($user->roles->first())->name ?? 'N/A',
-                'status'   => $user->status ? 'Active' : 'Inactive', // assuming a boolean 'status' column
+                'status'   => strtolower(optional($user->employee)->status) === 'active' ? 'Active' : 'Inactive',
                 'id'       => $user->id,
             ];
         });

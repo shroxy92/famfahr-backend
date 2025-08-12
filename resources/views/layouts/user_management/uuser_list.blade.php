@@ -6,6 +6,11 @@
     <div class="row">
         <div class="col-1"></div>
         <div class="col-10">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="container mt-5">
                 <div class="card shadow-sm">
                     <div class="card-header text-white d-flex justify-content-between align-items-center">
@@ -40,9 +45,7 @@
                                 </span>
                                     </td>
                                     <td>
-{{--                                        <a href="{{ route('users.edit', ['id' => 1]) }}" class="btn btn-sm btn-outline-primary">--}}
-{{--                                            <i class="fas fa-pen"></i> Edit--}}
-                                        <a href="{{url('user_edit')}}" class="btn btn-sm btn-outline-primary">
+                                        <a href="{{ route('hr.user.edit', ['id' => $user['id']])}}" class="btn btn-sm btn-outline-primary">
                                             <i class="fas fa-pen"></i> Edit
                                         </a>
                                     </td>

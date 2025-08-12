@@ -1,6 +1,6 @@
 @php
     // Helper Booleans
-    $isAttendanceOpen = Request::is('manual_entry') || Request::is('attendance_report');
+    $isAttendanceOpen = Request::is('attendance/entry') || Request::is('attendance/report');
     $isLeaveOpen = Request::is('new_leave') || Request::is('cancel_leave') || Request::is('adjust_leave') ||
                    Request::is('availed_*') || Request::is('leave_report');
     $isApplyOpen = Request::is('new_leave') || Request::is('cancel_leave') || Request::is('adjust_leave');
@@ -41,8 +41,8 @@
                 </a>
                 <div class="collapse {{ $isAttendanceOpen ? 'show' : '' }}" id="collapseLayoutsat" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link {{ Request::is('manual_entry') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('manual_entry') }}">Manual Attendance</a>
-                        <a class="nav-link {{ Request::is('attendance_report') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ url('attendance_report') }}">Attendance Report</a>
+                        <a class="nav-link {{ Request::is('attendance/entry') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('attendance.entry') }}">Manual Attendance</a>
+                        <a class="nav-link {{ Request::is('attendance/report') ? 'active text-info fw-bold' : '' }}" style="color: #2f4f4f !important;" href="{{ route('attendance.report') }}">Attendance Report</a>
                     </nav>
                 </div>
 

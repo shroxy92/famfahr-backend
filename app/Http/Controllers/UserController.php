@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\UserServiceContract;
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\Employee;
-use App\Services\EmployeeService;
-use App\Services\UserService;
 use Couchbase\Role;
 
 class UserController extends Controller
 {
     private $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserServiceContract $userService)
     {
         $this->userService = $userService;
     }
 
     public function index()
+    {
+        $userList = $this->userService->viewUser();
+        return view('layouts.user_management.uuser_list',compact('userList'));
+    }
+
+    public function create()
     {
         $employees = Employee::all();
         $roles = \Spatie\Permission\Models\Role::all();
@@ -28,12 +34,25 @@ class UserController extends Controller
     {
         $isUserData = $this->userService->createUser($request->validated());
 
-        return view('layouts.user_management.uuser_list');
+        return redirect()->route('hr.users')->with('success', 'User created successfully.');
+
     }
 
-    public function viewUsers()
+    public function edit($id)
     {
-        $userList = $this->userService->viewUser();
-        return view('layouts.user_management.uuser_list',compact('userList'));
+        $userData = $this->userService->editUser($id);
+        $currentRole = $userData->roles->first()?->name ?? null;
+        $roles = \Spatie\Permission\Models\Role::all();
+        return view('layouts.user_management.uedit_user',compact('userData','currentRole','roles'));
     }
+
+    public function update(UserUpdateRequest $request, $id)
+    {
+
+        $validatedData = $request->validated();
+        $this->userService->updateUser($id, $validatedData);
+        return redirect()->route('hr.users')->with("success", "User updated successfully");
+
+    }
+
 }

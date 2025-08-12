@@ -28,7 +28,13 @@
                         <tr>
                             <td>{{ $employee->employee_id }}</td>
                             <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
-                            <td>{{ $employee->department }}</td>
+                            <td>
+                                @if ($employee->departments->isNotEmpty())
+                                    {{ $employee->departments->pluck('name')->join(', ') }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td>{{ $employee->designation }}</td>
                             <td>{{ $employee->email }}</td>
                             <td>

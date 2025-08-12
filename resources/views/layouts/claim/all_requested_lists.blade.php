@@ -1,106 +1,145 @@
 @extends('layouts.master')
-@section('title', 'Claimed/Requested List')
+
+@section('title', 'My Submissions')
+
 @section('content')
     <div class="container py-5">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">My Financial Requests</h5>
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-collection me-2"></i>My Financial Submissions</h5>
             </div>
 
             <div class="card-body">
-{{--                @if($requests->isEmpty())--}}
-{{--                    <p class="text-center text-muted">No requests submitted yet.</p>--}}
-{{--                @else--}}
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Type</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Purpose</th>
-                                <th scope="col">Submitted</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-{{--                            @foreach($requests as $index => $request)--}}
-{{--                                <tr>--}}
-{{--                                    <td>{{ $index + 1 }}</td>--}}
-{{--                                    <td>--}}
-{{--                                        <span class="badge bg-info text-dark">--}}
-{{--                                            {{ ucfirst($request->type) }}--}}
-{{--                                        </span>--}}
-{{--                                    </td>--}}
-{{--                                    <td>${{ number_format($request->amount, 2) }}</td>--}}
-{{--                                    <td>{{ Str::limit($request->purpose, 40) }}</td>--}}
-{{--                                    <td>{{ $request->submitted_at->format('d M Y') }}</td>--}}
-{{--                                    <td>--}}
-{{--                                        @php--}}
-{{--                                            $statusColors = [--}}
-{{--                                                'pending' => 'warning',--}}
-{{--                                                'approved' => 'success',--}}
-{{--                                                'rejected' => 'danger',--}}
-{{--                                            ];--}}
-{{--                                        @endphp--}}
-{{--                                        <span class="badge bg-{{ $statusColors[$request->status] ?? 'secondary' }}">--}}
-{{--                                            {{ ucfirst($request->status) }}--}}
-{{--                                        </span>--}}
-{{--                                    </td>--}}
-{{--                                </tr>--}}
-{{--                            @endforeach--}}
-                                <tr onclick="window.location='{{ url('requested_details') }}';" style="cursor:pointer;">
-                                        <td>1</td>
-                                        <td><span class="badge bg-info text-dark">Advance Salary</span></td>
-                                        <td></td>
-                                        <td>1,2000.00</td>
-                                        <td>Home rent advance for July</td>
-                                        <td>01 Jul 2025</td>
-                                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td><span class="badge bg-success">Loan</span></td>
-                                    <td></td>
-                                    <td>15,000.00</td>
-                                    <td>Byke repair loan</td>
-                                    <td>20 Jun 2025</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td><span class="badge bg-secondary">Claim</span></td>
-                                    <td></td>
-                                    <td>250.00</td>
-                                    <td>Medical reimbursement for June</td>
-                                    <td>15 Jun 2025</td>
-                                    <td><span class="badge bg-danger">Rejected</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td><span class="badge bg-info text-dark">Advance Salary</span></td>
-                                    <td></td>
-                                    <td>8000.00</td>
-                                    <td>Emergency family support</td>
-                                    <td>10 Jun 2025</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td><span class="badge bg-secondary">Claim</span></td>
-                                    <td></td>
-                                    <td>1500.00</td>
-                                    <td>Travel reimbursement (conference)</td>
-                                    <td>05 Jun 2025</td>
-                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
-                                </tr>
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" id="submissionTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="loan-tab" data-bs-toggle="tab" data-bs-target="#loan" type="button" role="tab">Loan Claims</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="claims-tab" data-bs-toggle="tab" data-bs-target="#claims" type="button" role="tab">Claims</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="advance-tab" data-bs-toggle="tab" data-bs-target="#advance" type="button" role="tab">Advance Salaries</button>
+                    </li>
+                </ul>
 
-                            </tbody>
-                        </table>
+                <!-- Tab Content -->
+                <div class="tab-content mt-3">
+
+                    <!-- Loan Claims -->
+                    <div class="tab-pane fade show active" id="loan" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-success text-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Method</th>
+                                    <th>Duration</th>
+                                    <th>Start</th>
+                                    <th>Purpose</th>
+                                    <th>Amount</th>
+                                    <th>Submitted On</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse ($loanClaims as $i =>$loan)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td><span class="badge bg-secondary">{{ $loan->payment_method }}</span></td>
+                                        <td>{{ $loan->duration_months }} {{ Str::plural('month', $loan->duration_months) }}</td>
+                                        <td>{{ $loan->start_month }} {{ $loan->start_year }}</td>
+                                        <td>{{ $loan->purpose }}</td>
+                                        <td>{{ number_format($loan->amount, 2) }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($loan->created_at)->format('d M Y, h:i A') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">No loan claims found.</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-{{--                @endif--}}
-            </div>
-        </div>
-    </div>
+
+                    <!-- Claims -->
+                    <div class="tab-pane fade" id="claims" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-success text-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Description</th>
+                                    <th>Attachment</th>
+                                    <th>Submitted On</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse ($claims as $i => $claim)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $claim->category }}</td>
+                                        <td>{{ number_format($claim->amount, 2) }}</td>
+                                        <td>{{ $claim->from_date }}</td>
+                                        <td>{{ $claim->to_date }}</td>
+                                        <td>{{ $claim->description }}</td>
+                                        <td>
+                                            @if ($claim->attachment)
+                                                <a href="{{ asset('storage/' . $claim->attachment) }}" target="_blank">View</a>
+                                            @else
+                                                <span class="text-muted">None</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($claim->created_at)->format('d M Y, h:i A') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="text-center text-muted">No claims found.</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Advance Salaries -->
+                    <div class="tab-pane fade" id="advance" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-success text-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Reason</th>
+                                    <th>Submitted On</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse ($advanceSalaries as $i => $advance)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $advance->date }}</td>
+                                        <td>{{ number_format($advance->salary, 2) }}</td>
+                                        <td>{{ $advance->reason }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($advance->created_at)->format('d M Y, h:i A') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No advance salary requests found.</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div> <!-- end tab-content -->
+            </div> <!-- end card-body -->
+        </div> <!-- end card -->
+    </div> <!-- end container -->
 @endsection

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 interface UserRepositoryContract
 {
     public function createUser(array $data) : User;
+    public function editUser(int $id);
     public function updateUser(int $id, array $data) : User;
     public function deleteUser(int $id) : bool;
     public function viewUser();

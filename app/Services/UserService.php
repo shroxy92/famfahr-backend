@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
+use App\Contracts\UserRepositoryContract;
 use App\Contracts\UserServiceContract;
 use App\Models\User;
-use App\Repositories\UserRepository;
-use Illuminate\Database\Eloquent\Collection;
+
 
 class UserService implements UserServiceContract
 {
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepositoryContract $userRepository)
     {
         $this->userRepository = $userRepository;
     }
@@ -21,6 +21,11 @@ class UserService implements UserServiceContract
         // TODO: Implement createUser() method.
 
         return $this->userRepository->createUser($data);
+    }
+    public function editUser(int $id)
+    {
+        // TODO: Implement updateUser() method.
+        return $this->userRepository->editUser($id);
     }
 
     public function updateUser(int $id, array $data): User

@@ -15,7 +15,7 @@
                         <h4 class="mb-0">Submit a Claim</h4>
                     </div>
                     <div class="card-body">
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('claim.request.submit')}}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row mb-3">
@@ -24,12 +24,12 @@
                                     <label for="category" class="form-label">Claim Category</label>
                                     <select name="category" id="category" class="form-select" required>
                                         <option value="">Select a category</option>
-                                        <option value="Travel">Festival Holiday</option>
-                                        <option value="Medical">Daily Conveyance Reimbursement</option>
-                                        <option value="Food">Holiday Allowance</option>
+                                        <option value="Festival Holiday">Festival Holiday</option>
+                                        <option value="Daily Conveyance Reimbursement">Daily Conveyance Reimbursement</option>
+                                        <option value="Holiday Allowance">Holiday Allowance</option>
                                         <option value="Other">Other</option>
-                                        <option value="Travel">Night Allowance</option>
-                                        <option value="Medical">Travel Allowance</option>
+                                        <option value="Night Allowance">Night Allowance</option>
+                                        <option value="Travel Allowance">Travel Allowance</option>
                                     </select>
                                 </div>
                                 <!-- Claim Amount -->
@@ -42,12 +42,12 @@
                             <!-- Claim Date -->
                             <div class="row mb-3">
                                 <div class="col-6">
-                                    <label for="date" class="form-label">From Date</label>
-                                    <input type="date" name="date" id="date" class="form-control" required>
+                                    <label for="fmdate" class="form-label">From Date</label>
+                                    <input type="date" name="fmdate" id="fmdate" class="form-control" required>
                                 </div>
                                 <div class="col-6">
-                                    <label for="date" class="form-label">To Date</label>
-                                    <input type="date" name="date" id="date" class="form-control" required>
+                                    <label for="todate" class="form-label">To Date</label>
+                                    <input type="date" name="todate" id="todate" class="form-control" required>
                                 </div>
                             </div>
                             <!-- Description -->
@@ -59,7 +59,7 @@
                             <!-- Attach File -->
                             <div class="mb-3">
                                 <label for="attachment" class="form-label">Attach File</label>
-                                <input type="file" name="attachment" id="attachment" class="form-control" required>
+                                <input type="file" name="attachment" id="attachment" class="form-control" >
                             </div>
 
                             <!-- Submit Button -->
