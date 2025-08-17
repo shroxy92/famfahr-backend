@@ -30,7 +30,7 @@ class EmployeeRepository implements EmployeeRepositoryContract
      */
     public function getAllEmployees(): Collection
     {
-        return $this->model->all();
+        return $this->model::with('departments')->get();
     }
 
     /**
@@ -41,7 +41,7 @@ class EmployeeRepository implements EmployeeRepositoryContract
      */
     public function getEmployeeById(int $id): ?Employee
     {
-        return $this->model->find($id);
+        return $this->model::with('departments')->find($id);
     }
 
     /**
@@ -63,7 +63,9 @@ class EmployeeRepository implements EmployeeRepositoryContract
      */
     public function createEmployee(array $data): Employee
     {
-        return $this->model->create($data);
+        $insertedData = $this->model->create($data);
+        $insertedData->departments()->attach($data['department']);
+        return $insertedData;
     }
 
     /**

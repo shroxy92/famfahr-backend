@@ -3,6 +3,7 @@
 namespace App\Contracts;
 
 use App\Models\AdvanceSalary;
+use App\Models\Claim;
 use App\Models\LoanClaim;
 
 interface AllClaimRequestServiceContract
@@ -13,4 +14,6 @@ interface AllClaimRequestServiceContract
     public function advanceSalaryClaimRequest(array $data) : AdvanceSalary;
 
     public function advanceSalaryClaimRequestLists() : array;
+
+    public function claimRequests(array $data) : Claim;
 }

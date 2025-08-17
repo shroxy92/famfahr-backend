@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\UserServiceContract;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\Employee;
-use App\Services\EmployeeService;
-use App\Services\UserService;
 use Couchbase\Role;
 
 class UserController extends Controller
 {
     private $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserServiceContract $userService)
     {
         $this->userService = $userService;
     }

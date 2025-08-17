@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\DepartmentLeadServiceContract;
+use App\Contracts\EmployeeServiceContract;
 use App\Models\Department;
 use App\Models\DepartmentLead;
 use App\Http\Requests\StoreDepartmentLeadRequest;
 use App\Http\Requests\UpdateDepartmentLeadRequest;
-use App\Services\DepartmentLeadService;
-use App\Services\EmployeeService;
+
 
 
 class DepartmentLeadController extends Controller
 {
     protected $employeeService;
-    protected $departmentLeadservice;
+    protected $departmentLead;
 
-    public function __construct(EmployeeService $employeeService, DepartmentLeadService $departmentLeadService)
+    public function __construct(EmployeeServiceContract $employeeService, DepartmentLeadServiceContract $departmentLead)
     {
         $this->employeeService = $employeeService;
-        $this->departmentLeadservice = $departmentLeadService;
+        $this->departmentLead = $departmentLead;
     }
     /**
      * Display a listing of the resource.
@@ -45,7 +46,7 @@ class DepartmentLeadController extends Controller
     public function store(StoreDepartmentLeadRequest $request)
     {
         //dd($request);
-        $this->departmentLeadservice->addDepartmentLead($request->validated());
+        $this->departmentLead->addDepartmentLead($request->validated());
         return redirect()->route('hr.lead.add')->with('success', 'Lead assigned successfully.');
     }
 

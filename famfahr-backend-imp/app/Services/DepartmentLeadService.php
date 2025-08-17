@@ -3,16 +3,17 @@
 namespace App\Services;
 
 use App\Contracts\DepartmentLeadRepositoryContract;
+use App\Contracts\DepartmentLeadServiceContract;
 use App\Models\DepartmentLead;
 use App\Repositories\DepartmentLeadRepository;
 use Illuminate\Http\Request;
 use mysql_xdevapi\Collection;
 
-class DepartmentLeadService implements DepartmentLeadRepositoryContract
+class DepartmentLeadService implements DepartmentLeadServiceContract
 {
     protected $departmentLead;
 
-    public function __construct(DepartmentLeadRepository $departmentLead)
+    public function __construct(DepartmentLeadRepositoryContract $departmentLead)
     {
         $this->departmentLead = $departmentLead;
     }

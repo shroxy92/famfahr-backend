@@ -2,26 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Claim extends Model
+class Attendance extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'employee_id',
-        'category',
-        'amount',
-        'from_date',
-        'to_date',
-        'description',
-        'attachment',
+        'entry_time',
+        'exit_time',
+        'date',
+        'reason',
     ];
 
     public function employee()
     {
         return $this->belongsTo(Employee::class);
     }
-
 }
